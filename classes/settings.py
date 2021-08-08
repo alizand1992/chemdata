@@ -20,6 +20,8 @@ class Settings:
         if path != None:
             self.settings = Settings.setting_as_dict(path)
 
+        print(f"loaded the following setting file:\n{self.to_s()}")
+
     def get_settings_for_column(self, column: str, setting: str):
         return self.settings[column][setting]
 
@@ -31,6 +33,7 @@ class Settings:
             path = input("Please enter the path to the settings file: ")
 
         self.settings = self.setting_as_dict(path)
+        print(f"loaded the following setting file:\n{self.to_s()}")
 
     def to_s(self) -> str:
         return json.dumps(self.settings, indent = 4)
@@ -38,5 +41,3 @@ class Settings:
     def setting_as_dict(path):
         with open(path, 'r') as file:
             return json.load(file)
-
-        print(f"loaded the following setting file:\n{self.to_s()}")
