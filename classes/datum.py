@@ -12,7 +12,7 @@ class Datum:
     def sanatize(self, setting: Settings, column: str) -> None:
         self.datum = []
         for data_point in self.raw_datum:
-            col_val = data_point.get_data(column)
+            col_val = float(data_point.get_data(column))
 
             if col_val < setting.get_settings_for_column(column, 'upper_bound') and col_val > setting.get_settings_for_column(column, 'lower_bound'):
                 self.datum.append(data_point)
@@ -26,8 +26,9 @@ class Datum:
 
         return self.datum
 
-    def read_raw_data(self) -> bool:
-        path = input("Plesae enter the path to the csv file: ")
+    def read_raw_data(self, path = None) -> bool:
+        if path == None:
+            path = input("Plesae enter the path to the csv file: ")
 
         with open(path, 'r') as file:
             lines = file.readlines()
@@ -35,7 +36,7 @@ class Datum:
             columns = []
 
             for line in lines:
-                parts = line.split(',')
+                parts = line.strip().split(',')
 
                 if not columns:
                     for col in parts:

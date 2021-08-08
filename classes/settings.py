@@ -14,8 +14,11 @@ class Settings:
 }
 """
 
-    def __init__(self, settings = {}) -> None:
-        self.settings = settings
+    def __init__(self, path = None) -> None:
+        self.settings = {}
+
+        if path != None:
+            self.settings = Settings.setting_as_dict(path)
 
     def get_settings_for_column(self, column: str, setting: str):
         return self.settings[column][setting]
@@ -23,16 +26,17 @@ class Settings:
     def help() -> None:
         print(Settings.HELP_TEXT)
 
-    def load_settings(self) -> None:
-        path = input("Please enter the path to the settings file: ")
+    def load_settings(self, path = None) -> None:
+        if path == None:
+            path = input("Please enter the path to the settings file: ")
 
-        with open(path, 'r') as file:
-            self.settings = json.load(file)
-
-        print(f"loaded the following setting file:\n{self.to_s()}")
-    
+        self.settings = self.setting_as_dict(path)
 
     def to_s(self) -> str:
         return json.dumps(self.settings, indent = 4)
             
- 
+    def setting_as_dict(path):
+        with open(path, 'r') as file:
+            return json.load(file)
+
+        print(f"loaded the following setting file:\n{self.to_s()}")
